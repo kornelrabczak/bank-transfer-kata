@@ -40,17 +40,7 @@ class BankTransfer extends FunSuite with Matchers {
     val accountTo =
       Account.open(User("Alex", "Goe", 52, Address("Paris", "France", "Baguette", 2)))
 
-    transferMoney(accountFrom)(accountTo)(Balance(EUR, 15))(withdraw)(deposit) shouldBe Right(accountFrom.copy(balance = Balance(EUR, 0)),
-                                                                                              accountTo.copy(balance = Balance(EUR, 15)))
+    transferMoney(accountFrom)(accountTo)(Balance(EUR, 15)) shouldBe Right(accountFrom.copy(balance = Balance(EUR, 0)),
+                                                                           accountTo.copy(balance = Balance(EUR, 15)))
   }
-
-  val transferMoney: Account => Account => Transfer = a1 =>
-    a2 =>
-      amount =>
-        withdraw =>
-          deposit =>
-            for {
-              res1 <- withdraw(a1)(amount)
-              res2 <- deposit(a2)(amount)
-            } yield (res1, res2)
 }
