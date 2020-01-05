@@ -4,16 +4,17 @@ object Bank {
   type Country = String
   type City = String
 
-  case class User(firstName: String, lastName: String, age: Int, address: Address)
-  case class Address(city: City, country: Country, streetName: String, streetNo: Int)
-
   type Error = String
   type ErrorOrAccount = Either[String, Account]
   type ErrorOr[A] = Either[String, A]
+
   type Deposit = Account => Balance => ErrorOrAccount
   type Withdraw = Account => Balance => ErrorOrAccount
-
+  type CheckBalance = Account => Balance
   type Transfer = Account => Account => Balance => ErrorOr[(Account, Account)]
+
+  type Input = Unit => String
+  type Output = String => Unit
 
   val transferMoney: Transfer = a1 =>
     a2 =>
@@ -35,4 +36,8 @@ object Bank {
     balance => {
       Right(account.copy(balance = Balance.add(account.balance, balance)))
   }
+
+  case class User(firstName: String, lastName: String, age: Int, address: Address)
+
+  case class Address(city: City, country: Country, streetName: String, streetNo: Int)
 }
